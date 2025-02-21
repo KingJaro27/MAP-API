@@ -5,46 +5,52 @@ import requests
 import io
 from maps import get_map
 
-SCREEN_SIZE = [750, 500]
-
 
 class Example(QWidget):
     def __init__(self):
         super().__init__(windowTitle="Mega")
-        self.setGeometry(100, 100, SCREEN_SIZE[0] - 250, SCREEN_SIZE[-1])
-        self.adress = QLineEdit(self, placeholderText="Введите координаты")
-        self.mas = QLineEdit(self, placeholderText="Введиет масштаб")
-        self.qhbox = QHBoxLayout(self)
+        self.y_coord = QDoubleSpinBox(
+            self, decimals=6, value=59.119467, singleStep=0.000001
+        )
+        self.x_coord = QDoubleSpinBox(
+            self, decimals=6, value=37.904108, singleStep=0.000001
+        )
+        self.mas = QSpinBox(self, maximum=21, minimum=1, value=17)
+
+        self.pixmap = QPixmap(500, 500)
+        self.pixmap.fill()
+        self.image = QLabel(pixmap=self.pixmap)
+
         self.qvbox = QVBoxLayout()
-        self.adress.setFixedSize(100, 30)
-        self.mas.setFixedSize(100, 30)
         self.btn = QPushButton(self, clicked=self.ok)
-        self.btn.setFixedSize(100, 30)
-        self.adress.move(0, 100)
-        self.mas.move(0, 150)
-        self.btn.move(0, 200)
-        self.qvbox.addWidget(self.adress)
+        self.qvbox.addWidget(self.x_coord)
+        self.qvbox.addWidget(self.y_coord)
         self.qvbox.addWidget(self.mas)
         self.qvbox.addWidget(self.btn)
+        self.qvbox.addStretch()
         self.btn.setText("ok")
+
+        self.qhbox = QHBoxLayout(self)
+        self.qhbox.addLayout(self.qvbox)
+        self.qhbox.addWidget(self.image)
+        self.ok()
 
     def initUI(self):
         ## Изображение
-        self.pixmap = QPixmap()
+
         self.pixmap.loadFromData(self.map_file.getvalue())
-        self.image = QLabel(self)
         self.image.move(0, 0)
-        self.image.resize(450, 450)
+        self.image.resize(500, 500)
         self.image.setPixmap(self.pixmap)
-        self.qhbox.addWidget(self.image)
-        self.qhbox.addLayout(self.qvbox)
 
     def ok(self):
-        text = self.adress.text().split()
-        self.x, self.y = float(text[0]), float(text[-1])
-        self.m = float(self.mas.text())
+        self.x, self.y = self.x_coord.value(), self.y_coord.value()
+        self.m = self.mas.value()
         self.map_file = get_map(self.x, self.y, self.m)
         self.initUI()
+
+    def keyPressEvent(self, keyPress):
+        pass
 
 
 if __name__ == "__main__":
