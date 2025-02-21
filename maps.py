@@ -9,7 +9,7 @@ def get_map(coord_x, coord_y, scale):
     '''f3a0fe3a-b07e-4840-a1da-06f18b2ddf13'''
     map_params = {
         "ll": f"{coord_x},{coord_y}",
-        "spn": f"{scale},{scale}",
+        "z": f"{scale}",
         "l": "map",
         "size": "650,450",
         #"apikey": apikey,
@@ -25,4 +25,4 @@ def get_map(coord_x, coord_y, scale):
     return image
 
 
-get_map(37, 64, 1)
+#get_map(4, 44, 11)
