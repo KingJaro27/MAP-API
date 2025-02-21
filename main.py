@@ -53,11 +53,23 @@ class Example(QWidget):
         self.initUI()
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key.Key_W:
+        if event.key() == Qt.Key.Key_Z:
             self.mas.setValue(self.mas.value() + 1)
             self.ok()
-        elif event.key() == Qt.Key.Key_S:
+        elif event.key() == Qt.Key.Key_X:
             self.mas.setValue(self.mas.value() - 1)
+            self.ok()
+        elif event.key() == Qt.Key.Key_D:
+            self.x_coord.setValue(self.x_coord.value() + 0.000001)
+            self.ok()
+        elif event.key() == Qt.Key.Key_S:
+            self.y_coord.setValue(self.y_coord.value() - 0.000001)
+            self.ok()
+        elif event.key() == Qt.Key.Key_A:
+            self.x_coord.setValue(self.x_coord.value() - 0.000001)
+            self.ok()
+        elif event.key() == Qt.Key.Key_W:
+            self.y_coord.setValue(self.y_coord.value() + 0.000001)
             self.ok()
         else:
             super().keyPressEvent(event)
