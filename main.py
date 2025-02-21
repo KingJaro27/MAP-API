@@ -1,6 +1,7 @@
 import sys
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
+from PyQt6.QtCore import Qt
 import requests
 import io
 from maps import get_map
@@ -8,7 +9,10 @@ from maps import get_map
 
 class Example(QWidget):
     def __init__(self):
-        super().__init__(windowTitle="Mega")
+        super().__init__()
+        self.setWindowTitle("Mega")
+
+        # Виджеты для ввода координат и масштаба
         self.y_coord = QDoubleSpinBox(
             self, decimals=6, value=59.119467, singleStep=0.000001
         )
@@ -21,26 +25,25 @@ class Example(QWidget):
         self.pixmap.fill()
         self.image = QLabel(pixmap=self.pixmap)
 
-        self.qvbox = QVBoxLayout()
         self.btn = QPushButton(self, clicked=self.ok)
+        self.btn.setText("ok")
+
+        self.qvbox = QVBoxLayout()
         self.qvbox.addWidget(self.x_coord)
         self.qvbox.addWidget(self.y_coord)
         self.qvbox.addWidget(self.mas)
         self.qvbox.addWidget(self.btn)
         self.qvbox.addStretch()
-        self.btn.setText("ok")
 
         self.qhbox = QHBoxLayout(self)
         self.qhbox.addLayout(self.qvbox)
         self.qhbox.addWidget(self.image)
+
+        self.setFocus()
         self.ok()
 
     def initUI(self):
-        ## Изображение
-
         self.pixmap.loadFromData(self.map_file.getvalue())
-        self.image.move(0, 0)
-        self.image.resize(500, 500)
         self.image.setPixmap(self.pixmap)
 
     def ok(self):
@@ -49,8 +52,15 @@ class Example(QWidget):
         self.map_file = get_map(self.x, self.y, self.m)
         self.initUI()
 
-    def keyPressEvent(self, keyPress):
-        pass
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key.Key_W:
+            self.mas.setValue(self.mas.value() + 1)
+            self.ok()
+        elif event.key() == Qt.Key.Key_S:
+            self.mas.setValue(self.mas.value() - 1)
+            self.ok()
+        else:
+            super().keyPressEvent(event)
 
 
 if __name__ == "__main__":
