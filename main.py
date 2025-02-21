@@ -21,6 +21,10 @@ class Example(QWidget):
         )
         self.mas = QSpinBox(self, maximum=21, minimum=1, value=17)
 
+        self.black = QCheckBox(self, checkStateChanged=self.africa)
+        self.black.setText("Темная тема")
+        self.color = "white"
+
         self.pixmap = QPixmap(500, 500)
         self.pixmap.fill()
         self.image = QLabel(pixmap=self.pixmap)
@@ -33,6 +37,7 @@ class Example(QWidget):
         self.qvbox.addWidget(self.y_coord)
         self.qvbox.addWidget(self.mas)
         self.qvbox.addWidget(self.btn)
+        self.qvbox.addWidget(self.black)
         self.qvbox.addStretch()
 
         self.qhbox = QHBoxLayout(self)
@@ -49,7 +54,8 @@ class Example(QWidget):
     def ok(self):
         self.x, self.y = self.x_coord.value(), self.y_coord.value()
         self.m = self.mas.value()
-        self.map_file = get_map(self.x, self.y, self.m)
+        self.map_file = get_map(self.x, self.y, self.m, self.color)
+        print(self.color)
         self.initUI()
 
     def keyPressEvent(self, event):
@@ -73,6 +79,12 @@ class Example(QWidget):
             self.ok()
         else:
             super().keyPressEvent(event)
+
+    def africa(self):
+        if self.black.isChecked():
+            self.color = "black"
+        else:
+            self.color = "white"
 
 
 if __name__ == "__main__":
