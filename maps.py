@@ -20,9 +20,6 @@ def get_map(coord_x, coord_y, scale):
     resp.raise_for_status()
     image = io.BytesIO()
     image.write(resp.content)
-    ii = Image.open(image)
-    ii.show()
     return image
 
 
-#get_map(4, 44, 11)
